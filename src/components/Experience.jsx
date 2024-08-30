@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Environment, Float, OrbitControls } from "@react-three/drei";
 import { Book } from "./Book";
 
@@ -5,6 +6,18 @@ const SHADOW_MAP_SIZE = 2048;
 const FLOOR_SIZE = 100;
 
 export const Experience = () => {
+  const [scale, setScale] = useState(1.2);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    const handleMediaQueryChange = (e) => {
+      setScale(e.matches ? 0.8 : 1.2);
+    };
+    mediaQuery.addListener(handleMediaQueryChange);
+    handleMediaQueryChange(mediaQuery);
+    return () => mediaQuery.removeListener(handleMediaQueryChange);
+  }, []);
+
   return (
     <>
       <Float
@@ -13,7 +26,7 @@ export const Experience = () => {
         speed={2}
         rotationIntensity={2}
       >
-        <Book scale={1.5} />
+        <Book scale={scale} />
       </Float>
 
       <OrbitControls />
